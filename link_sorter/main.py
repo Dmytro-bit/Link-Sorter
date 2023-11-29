@@ -21,7 +21,7 @@ def dict_create(file) -> dict:
                 if line == '':
                     continue
 
-                if 'http://' or 'https://' not in line:  # check link or text
+                if 'http' not in line or 'https' not in line:  # check link or text
                     data_dict['text'].append(line)
                     continue
 
