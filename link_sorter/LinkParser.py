@@ -53,4 +53,4 @@ class DataOutput:
                 for item in value:
                     write_file.write(f"{item}\n")
                 write_file.write("\n")
-        print(f"Output TEXT file: {self.output_path} was created")
+        print(f"Output file: {self.output_path}.txt was created")
