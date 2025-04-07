@@ -14,9 +14,10 @@ if __name__ == "__main__":
     except getopt.GetoptError:
         print("main.py -i <input_folder> -o <output_folder> -f <output_file_name>")
         sys.exit(2)
+    safe = True
 
     for opt, arg in opts:
-        if opt == "-h":
+        if opt in ("-h", "--help"):
             print("main.py -i <input_folder> -o <output_folder> -f <output_file_name>")
             sys.exit()
         elif opt in ("-i", "--input_folder"):
@@ -25,8 +26,10 @@ if __name__ == "__main__":
             output_folder = arg
         elif opt in ("-f", "--output_file_name"):
             output_file_name = arg
+        elif opt == "--unsafe":
+            safe = False
 
     link_parser = LinkParser(input_folder)
     data_output = DataOutput(output_folder, output_file_name)
-    data = link_parser.read_files()
+    data = link_parser.read_files(safe=safe)
     data_output.generate_header_text_file(data)
