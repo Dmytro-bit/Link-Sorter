@@ -11,7 +11,11 @@ class LinkParser:
     def domain_name(url) -> str:
         return urlparse(url).netloc
 
-    def read_files(self) -> dict[str, set[str]]:
+    @staticmethod
+    def process_url(url) -> str:
+        return urlparse(url)._replace(query="").geturl()
+
+    def read_files(self, safe=True) -> dict[str, set[str]]:
         data_dict = {"text": set()}
 
         for file in os.listdir(self.input_folder):
@@ -31,6 +35,9 @@ class LinkParser:
 
                     domain = self.domain_name(line)
 
+                    if safe:
+                        line = self.process_url(line)
+
                     if domain in data_dict:
                         data_dict[domain].add(f"{line}")
                     else:
@@ -46,11 +53,18 @@ class DataOutput:
         assert os.path.isdir(output_folder), "Output folder does not exist"
         self.output_path = output_folder + "/" + output_file_name
 
-    def generate_text_file(self, data) -> None:
+    def generate_header_text_file(self, data) -> None:
         with open(self.output_path + ".txt", "w", encoding="utf-8") as write_file:
             for key, value in data.items():
                 write_file.write(f"[---{key}---]\n")
                 for item in value:
                     write_file.write(f"{item}\n")
                 write_file.write("\n")
+        print(f"Output file: {self.output_path}.txt was created")
+
+    def generate_text_file(self, data) -> None:
+        with open(self.output_path + ".txt", "w", encoding="utf-8") as write_file:
+            for key, value in data.items():
+                for item in value:
+                    write_file.write(f"{item}\n")
         print(f"Output file: {self.output_path}.txt was created")

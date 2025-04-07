@@ -29,4 +29,4 @@ if __name__ == "__main__":
     link_parser = LinkParser(input_folder)
     data_output = DataOutput(output_folder, output_file_name)
     data = link_parser.read_files()
-    data_output.generate_text_file(data)
+    data_output.generate_header_text_file(data)
